@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>Blog</title>
+    <style>
+      /* Blog Page Styles */
+      body {
+        background: linear-gradient(to right, #4b6cb7, #182848); /* Blue gradient */
+        color: white;
+        font-family: 'Arial', sans-serif;
+        padding-top: 80px; /* Ensure space for fixed navbar */
+      }
+
+      /* Blog Title */
+      h1 {
+        font-size: 2rem;
+        color: #ffcc70; /* Warm contrast color for the title */
+      }
+
+      /* Blog Content */
+      .blog-content {
+        background: rgba(255, 255, 255, 0.1); /* Glass effect */
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        margin-bottom: 30px;
+      }
+
+      /* Image Styling */
+      .blog-image {
+        width: 100%;
+        max-width: 700px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Author Info */
+      .author-info {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      .author-info img {
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      .author-info .author-name {
+        font-size: 1rem;
+        font-weight: bold;
+      }
+
+      /* Comment Section */
+      .comment-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      /* Comment Input */
+      .comment-input {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .comment-input input {
+        flex: 1;
+        margin-right: 10px;
+        font-size: 14px;
+        padding: 10px;
+      }
+
+      .comment-input button {
+        font-size: 14px;
+        padding: 10px 15px;
+      }
+
+      /* Individual Comment */
+      .comment {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .comment img {
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      .comment-content {
+        max-width: 90%;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('./partials/nav') %>
+
+    <div class="container mt-4">
+      <div class="blog-content">
+        <h1><%= blog.title %></h1>
+        <img src="<%= blog.coverImageURL %>" class="blog-image" alt="Blog Image" />
+        <pre class="mt-3"><%= blog.body %></pre>
+      </div>
+    </div>
+
+    <div class="container mt-4">
+      <div class="author-info">
+        <img src="<%= blog.createdBy.profileImageURL %>" width="50px" alt="Author Image" />
+        <div class="author-name"><%= blog.createdBy.fullName %></div>
+      </div>
+    </div>
+
+    <div class="container mt-3">
+      <div class="comment-section">
+        <h3>Comments (<%= comments.length %>)</h3>
+
+        <% if (locals.user) { %>
+          <form action="/blog/comment/<%= blog._id %>" method="post" class="comment-input">
+            <input
+              type="text"
+              name="content"
+              class="form-control"
+              placeholder="Enter your comment"
+            />
+            <button class="btn btn-sm btn-primary" type="submit">Add</button>
+          </form>
+        <% } %>
+
+        <div class="mt-3">
+          <% comments.forEach(comment => { %>
+            <div class="comment">
+              <img src="<%= comment.createdBy.profileImageURL %>" width="50px" alt="Commenter Image" />
+              <div class="comment-content">
+                <strong><%= comment.createdBy.fullName %></strong>
+                <pre><%= comment.content %></pre>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+
+    <%- include('./partials/scripts') %>
+  </body>
+</html>

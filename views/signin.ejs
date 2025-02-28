@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>Signin</title>
+    <style>
+      /* Signin Page Styles */
+      body {
+        background: linear-gradient(to right, #4b6cb7, #182848); /* Blue gradient */
+        color: white;
+        font-family: 'Arial', sans-serif;
+        padding-top: 80px; /* Ensure space for fixed navbar */
+      }
+
+      .container {
+        max-width: 400px;
+        margin-top: 60px;
+        background: rgba(255, 255, 255, 0.1); /* Glass effect */
+        backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .form-label {
+        font-weight: bold;
+      }
+
+      .form-control {
+        background: rgba(255, 255, 255, 0.1); /* Glass effect */
+        border: none;
+        border-radius: 10px;
+        color: white;
+        transition: background 0.3s ease;
+      }
+
+      .form-control:focus {
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0px 0px 5px rgba(255, 204, 112, 0.7); /* Warm contrast */
+      }
+
+      .form-text {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+      }
+
+      .btn-primary {
+        background-color: #ffcc70; /* Warm contrast */
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        width: 100%;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background-color: #e6b348; /* Slightly darker warm color */
+      }
+
+      /* Add some margin-bottom to the last form input */
+      .mb-3 {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('./partials/nav') %>
+
+    <div class="container">
+      <form action="/user/signin" method="post">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email address</label>
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            required
+          />
+          <div id="emailHelp" class="form-text">
+            We'll never share your email with anyone else.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input
+            name="password"
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign In</button>
+      </form>
+    </div>
+
+    <%- include('./partials/scripts') %>
+  </body>
+</html>

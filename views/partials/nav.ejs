@@ -1,0 +1,96 @@
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="/">Blogify</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+
+        <% if (locals.user) { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/blog/add-new">Add Blog</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Options
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
+          </ul>
+        </li>
+        <% } else { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/signup">Create Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-outline-light px-3" href="/user/signin">Sign In</a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Display Error Messages -->
+<% if (locals.error) { %>
+<div class="container mt-4">
+  <div class="alert alert-danger" role="alert"><%= locals.error %></div>
+</div>
+<% } %>
+
+<style>
+  /* Glassmorphism Navbar */
+  .navbar {
+    background: rgba(255, 255, 255, 0.1); /* Light transparent */
+    backdrop-filter: blur(10px); /* Blurred effect */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 15px 0;
+  }
+
+  .navbar-brand {
+    font-size: 1.5rem;
+    color: white;
+  }
+
+  .navbar-nav .nav-link {
+    color: white !important;
+    margin: 0 12px;
+    transition: color 0.3s ease-in-out;
+  }
+
+  .navbar-nav .nav-link:hover {
+    color: #ffcc70 !important; /* Warm contrast */
+  }
+
+  .dropdown-menu {
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+  }
+
+  .dropdown-item {
+    color: white !important;
+  }
+
+  .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+</style>
