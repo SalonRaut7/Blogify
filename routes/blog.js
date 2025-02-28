@@ -47,7 +47,12 @@ router.post("/comment/:blogId", async (req, res) => {
   return res.redirect(`/blog/${req.params.blogId}`);
 });
 
+
 router.post("/", upload.single("coverImage"), async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/user/signin?error=You must log in first to add a blog");
+  }
+
   const { title, body } = req.body;
   const blog = await Blog.create({
     body,
@@ -55,7 +60,75 @@ router.post("/", upload.single("coverImage"), async (req, res) => {
     createdBy: req.user._id,
     coverImageURL: `/uploads/${req.file.filename}`,
   });
+
   return res.redirect(`/blog/${blog._id}`);
 });
+
+router.post("/like/:id", async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/user/signin?error=You must log in first to like a blog");
+  }
+
+  const blog = await Blog.findById(req.params.id);
+  if (!blog) return res.redirect("/");
+
+  const userId = req.user._id;
+  const likeIndex = blog.likes.indexOf(userId);
+
+  if (likeIndex === -1) {
+    // If user hasn't liked before, add like
+    blog.likes.push(userId);
+  } else {
+    // If user has already liked, remove like (toggle)
+    blog.likes.splice(likeIndex, 1);
+  }
+
+  await blog.save();
+  return res.redirect(`/blog/${blog._id}`);
+});
+
+
+router.get("/edit/:id", async (req, res) => {
+  if (!req.user) return res.redirect("/user/signin?error=You must log in first");
+
+  const blog = await Blog.findById(req.params.id);
+  if (!blog || blog.createdBy.toString() !== req.user._id.toString()) {
+    return res.redirect("/?error=Unauthorized access");
+  }
+
+  return res.render("editBlog", { blog });
+});
+
+
+router.post("/edit/:id", async (req, res) => {
+  if (!req.user) return res.redirect("/user/signin?error=You must log in first");
+
+  const blog = await Blog.findById(req.params.id);
+  if (!blog || blog.createdBy.toString() !== req.user._id.toString()) {
+    return res.redirect("/?error=Unauthorized access");
+  }
+
+  blog.title = req.body.title;
+  blog.body = req.body.body;
+  await blog.save();
+
+  return res.redirect(`/blog/${blog._id}`);
+});
+
+
+router.post("/delete/:id", async (req, res) => {
+  if (!req.user) return res.redirect("/user/signin?error=You must log in first");
+
+  const blog = await Blog.findById(req.params.id);
+  if (!blog || blog.createdBy.toString() !== req.user._id.toString()) {
+    return res.redirect("/?error=Unauthorized access");
+  }
+
+  await Blog.findByIdAndDelete(req.params.id);
+  return res.redirect("/");
+});
+
+
+
 
 module.exports = router;

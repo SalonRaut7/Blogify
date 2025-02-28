@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <%- include('./partials/head') %>
     <title>Blog</title>
     <style>
@@ -26,6 +26,7 @@
         border-radius: 10px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         margin-bottom: 30px;
+        position: relative;
       }
 
       /* Image Styling */
@@ -51,6 +52,44 @@
       .author-info .author-name {
         font-size: 1rem;
         font-weight: bold;
+      }
+
+      /* Action Buttons */
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .actions button, .actions a {
+        background-color: #ffcc70;
+        border: none;
+        padding: 8px 15px;
+        font-size: 14px;
+        border-radius: 5px;
+        cursor: pointer;
+        color: black;
+        text-decoration: none;
+      }
+
+      .actions button:hover, .actions a:hover {
+        background-color: #ffaa33;
+      }
+
+      /* Like Button */
+      .like-button {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background-color: transparent;
+        border: none;
+        color: white;
+        cursor: pointer;
+      }
+
+      .like-button:hover {
+        color: #ffcc70;
       }
 
       /* Comment Section */
@@ -99,8 +138,8 @@
         max-width: 90%;
       }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <%- include('./partials/nav') %>
 
     <div class="container mt-4">
@@ -108,6 +147,28 @@
         <h1><%= blog.title %></h1>
         <img src="<%= blog.coverImageURL %>" class="blog-image" alt="Blog Image" />
         <pre class="mt-3"><%= blog.body %></pre>
+
+        <!-- Like Button -->
+        <% if (locals.user) { %>
+          <form action="/blog/like/<%= blog._id %>" method="POST">
+            <button type="submit" class="like-button">
+              ❤️ <span><%= blog.likes.length %></span> Likes
+            </button>
+          </form>
+        <% } else { %>
+          <p>❤️ <%= blog.likes.length %> Likes</p>
+        <% } %>
+
+        <!-- Edit & Delete Buttons (Only for Blog Creator) -->
+        <% if (locals.user && locals.user._id.toString() === blog.createdBy._id.toString()) { %>
+          <div class="actions">
+            <a href="/blog/edit/<%= blog._id %>">✏️ Edit</a>
+            <form action="/blog/delete/<%= blog._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this blog?');">
+              <button type="submit">🗑️ Delete</button>
+            </form>
+          </div>
+        <% } %>
+
       </div>
     </div>
 
@@ -149,5 +210,5 @@
     </div>
 
     <%- include('./partials/scripts') %>
-  </body>
+</body>
 </html>

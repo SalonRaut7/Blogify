@@ -3,9 +3,12 @@ const User = require("../models/user");
 
 const router = Router();
 
+
 router.get("/signin", (req, res) => {
-  return res.render("signin");
+  const error = req.query.error || null; // Get error from query param if exists
+  return res.render("signin", { error });
 });
+
 
 router.get("/signup", (req, res) => {
   return res.render("signup");
