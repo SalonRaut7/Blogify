@@ -137,16 +137,26 @@
       .comment-content {
         max-width: 90%;
       }
+
+      /* Ensure blog body is properly formatted */
+      .blog-body p {
+        white-space: normal; /* Ensures text wraps inside paragraphs */
+        word-wrap: break-word; /* Ensures long words wrap properly */
+      }
     </style>
 </head>
 <body>
     <%- include('./partials/nav') %>
-
+  
     <div class="container mt-4">
       <div class="blog-content">
         <h1><%= blog.title %></h1>
         <img src="<%= blog.coverImageURL %>" class="blog-image" alt="Blog Image" />
-        <pre class="mt-3"><%= blog.body %></pre>
+        
+        <!-- Blog Body (Description) -->
+        <div class="blog-body mt-3">
+          <p><%= blog.body.replace(/\n/g, "<br>") %></p>
+        </div>
 
         <!-- Like Button -->
         <% if (locals.user) { %>

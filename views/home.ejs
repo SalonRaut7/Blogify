@@ -42,25 +42,44 @@
       .card-body {
         text-align: center;
       }
+
+      /* No Blogs Message */
+      .no-blogs {
+        text-align: center;
+        font-size: 1.5rem;
+        color: white;
+        margin-top: 50px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      }
     </style>
   </head>
   <body>
     <%- include('./partials/nav') %>
 
     <div class="container content-container">
-      <div class="row g-4">
-        <% blogs.forEach(blog => { %>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
-          <div class="card">
-            <img src="<%= blog.coverImageURL %>" class="card-img-top" alt="Blog Image" />
-            <div class="card-body">
-              <h5 class="card-title"><%= blog.title %></h5>
-              <a href="/blog/<%= blog._id %>" class="btn btn-light">View</a>
+      <% if (blogs.length === 0) { %>
+        <div class="no-blogs">
+          <p>No blogs yet.</p>
+        </div>
+      <% } else { %>
+        <div class="row g-4">
+          <% blogs.forEach(blog => { %>
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
+            <div class="card">
+              <img src="<%= blog.coverImageURL %>" class="card-img-top" alt="Blog Image" />
+              <div class="card-body">
+                <h5 class="card-title"><%= blog.title %></h5>
+                <a href="/blog/<%= blog._id %>" class="btn btn-light">View</a>
+              </div>
             </div>
           </div>
+          <% }) %>
         </div>
-        <% }) %>
-      </div>
+      <% } %>
     </div>
 
     <%- include('./partials/scripts') %>

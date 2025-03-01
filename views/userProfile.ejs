@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>User Profile</title>
+    <style>
+      /* Background and general styling */
+      body {
+        background: linear-gradient(to right, #4b6cb7, #182848); /* Blue gradient */
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      /* Adjust content below the fixed navbar */
+      .content-container {
+        margin-top: 80px; /* Adjust this value if needed */
+      }
+
+      /* Profile Container Styling */
+      .profile-container {
+        max-width: 500px;
+        margin: auto;
+        background: rgba(255, 255, 255, 0.1); /* Slight transparency */
+        backdrop-filter: blur(10px); /* Glass effect */
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        color: white;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Profile Image Styling */
+      .profile-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid white;
+      }
+
+      /* Edit Profile Button */
+      .btn-light {
+        margin-top: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .btn-light:hover {
+        background: rgba(255, 255, 255, 0.4);
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('./partials/nav') %>
+
+    <div class="container content-container">
+      <div class="profile-container">
+
+        <img src="<%= user.profileImageURL %>" alt="Profile Image" class="profile-img">
+  
+        <h2><%= user.fullName %></h2>
+        <p><strong>Email:</strong> <%= user.email %></p>
+        <p><strong>Role:</strong> <%= user.role %></p>
+        
+
+        <a href="/user/edit-profile" class="btn btn-light">Edit Profile</a>
+      </div>
+    </div>
+
+    <%- include('./partials/scripts') %>
+  </body>
+</html>

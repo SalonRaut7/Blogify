@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <title>Edit Profile</title>
+  <style>
+    /* Background and general styling */
+    body {
+      background: linear-gradient(to right, #4b6cb7, #182848); /* Blue gradient */
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Adjust content below the fixed navbar */
+    .content-container {
+      margin-top: 80px; /* Adjust this value if needed */
+    }
+
+    /* Edit Profile Container Styling */
+    .edit-profile-container {
+      max-width: 500px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.1); /* Slight transparency */
+      backdrop-filter: blur(10px); /* Glass effect */
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Form control styling */
+    .form-control {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 5px;
+    }
+
+    /* Button Styling */
+    .btn-light {
+      margin-top: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn-light:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Profile image preview */
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid white;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <%- include('./partials/nav') %>
+
+  <div class="container content-container">
+    <div class="edit-profile-container">
+      <h2>Edit Profile</h2>
+
+      <!-- Display current profile image if exists -->
+      <% if (user.profileImageURL) { %>
+        <img src="<%= user.profileImageURL %>" alt="Current Profile Image" class="profile-img">
+      <% } else { %>
+        <p>No profile image</p>
+      <% } %>
+
+      <form action="/user/update-profile" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-control" name="fullName" value="<%= user.fullName %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" name="email" value="<%= user.email %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Profile Picture</label>
+          <input type="file" class="form-control" name="profileImage">
+        </div>
+
+        <button type="submit" class="btn btn-light">Update Profile</button>
+      </form>
+    </div>
+  </div>
+
+  <%- include('./partials/scripts') %>
+</body>
+</html>

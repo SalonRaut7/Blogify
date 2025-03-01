@@ -1,8 +1,16 @@
 const { Router } = require("express");
 const User = require("../models/user");
-
+const multer = require("multer");
+const path = require("path");
 const router = Router();
 
+const storage = multer.diskStorage({
+  destination: "./public/uploads/profile/",
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: storage });
 
 router.get("/signin", (req, res) => {
   const error = req.query.error || null; // Get error from query param if exists
@@ -39,6 +47,37 @@ router.post("/signup", async (req, res) => {
     password,
   });
   return res.redirect("/");
+});
+
+router.get("/profile", async (req, res) => {
+  if (!req.user) return res.redirect("/user/signin");
+  const user = await User.findById(req.user._id);
+  return res.render("userProfile", { user });
+});
+
+router.get("/edit-profile", async (req, res) => {
+  if (!req.user) return res.redirect("/user/signin");
+  const user = await User.findById(req.user._id);
+  return res.render("editProfile", { user });
+});
+
+router.post("/update-profile", upload.single("profileImage"), async (req, res) => {
+  if (!req.user) return res.redirect("/user/signin");
+
+  try {
+    const { fullName, email } = req.body;
+    let profileImageURL = req.user.profileImageURL;
+
+    if (req.file) {
+      profileImageURL = "/uploads/profile/" + req.file.filename;
+    }
+
+    await User.findByIdAndUpdate(req.user._id, { fullName, email, profileImageURL });
+    return res.redirect("/user/profile");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server Error");
+  }
 });
 
 module.exports = router;
