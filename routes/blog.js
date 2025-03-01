@@ -27,9 +27,12 @@ router.get("/add-new", (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const blog = await Blog.findById(req.params.id).populate("createdBy");
-  const comments = await Comment.find({ blogId: req.params.id }).populate(
-    "createdBy"
-  );
+  const comments = await Comment.find({ blogId: req.params.id })
+    .populate("createdBy")
+    .populate({
+      path: 'replies',
+      populate: { path: 'createdBy' }  // Populate createdBy for replies
+    });
 
   return res.render("blog", {
     user: req.user,
@@ -128,7 +131,65 @@ router.post("/delete/:id", async (req, res) => {
   return res.redirect("/");
 });
 
+router.post("/comment/like/:commentId", async (req, res) => {
+  const userId = req.user._id; 
+  const { commentId } = req.params;
 
+  try {
+    const comment = await Comment.findById(commentId);
+
+    if (comment.likes.includes(userId)) {
+      comment.likes.pull(userId); // Remove user ID from the likes array
+    } else {
+      comment.likes.push(userId); // Add user ID to the likes array
+    }
+
+    await comment.save();
+    return res.redirect("/blog/" + comment.blogId); 
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server Error");
+  }
+});
+
+router.get("/comment/edit/:commentId", async (req, res) => {
+  const { commentId } = req.params;
+
+  try {
+    const comment = await Comment.findById(commentId);
+    
+    // Check if the logged-in user is the one who created the comment
+    if (comment.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).send("Unauthorized");
+    }
+
+    return res.render("editComment", { comment }); 
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server Error");
+  }
+});
+
+router.post("/comment/update/:commentId", async (req, res) => {
+  const { commentId } = req.params;
+  const { content } = req.body;
+
+  try {
+    const comment = await Comment.findById(commentId);
+
+    if (comment.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).send("Unauthorized");
+    }
+
+    comment.content = content;
+    await comment.save();
+
+    return res.redirect("/blog/" + comment.blogId); 
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server Error");
+  }
+});
 
 
 module.exports = router;

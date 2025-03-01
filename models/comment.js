@@ -14,6 +14,8 @@ const commentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "user",
     },
+    likes: [{ type: Schema.Types.ObjectId, ref: "user" }], 
+    replies: [{ type: Schema.Types.ObjectId, ref: "comment" }] 
   },
   { timestamps: true }
 );

@@ -138,6 +138,19 @@
         max-width: 90%;
       }
 
+      .reply-section {
+        margin-left: 30px;
+        margin-top: 10px;
+      }
+
+      .reply-button {
+        font-size: 14px;
+        color: #ffcc70;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+      }
+
       /* Ensure blog body is properly formatted */
       .blog-body p {
         white-space: normal; /* Ensures text wraps inside paragraphs */
@@ -212,6 +225,18 @@
               <div class="comment-content">
                 <strong><%= comment.createdBy.fullName %></strong>
                 <pre><%= comment.content %></pre>
+
+                <% if (locals.user) { %>
+                  <form action="/blog/comment/like/<%= comment._id %>" method="POST">
+                    <button type="submit" class="like-button">
+                      ❤️ <span><%= comment.likes.length %></span> Likes
+                    </button>
+                  </form>
+                <% } %>
+
+                <% if (locals.user && locals.user._id.toString() === comment.createdBy._id.toString()) { %>
+                  <a href="/blog/comment/edit/<%= comment._id %>">✏️ Edit</a>
+                <% } %>
               </div>
             </div>
           <% }) %>

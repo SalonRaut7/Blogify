@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head') %>
+    <title>Edit Comment</title>
+    <style>
+      body {
+        padding-top: 80px; 
+        background: linear-gradient(to right, #4b6cb7, #182848); 
+        color: white;
+        font-family: 'Arial', sans-serif;
+      }
+      .container {
+        margin-top: 100px;
+      }
+    </style>
+</head>
+<body>
+    <%- include('./partials/nav') %>
+
+    <div class="container mt-4">
+      <h2>Edit Your Comment</h2>
+
+      <form action="/blog/comment/update/<%= comment._id %>" method="POST">
+        <div class="form-group">
+          <textarea
+            name="content"
+            class="form-control"
+            rows="5"
+            required
+          ><%= comment.content %></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Update Comment</button>
+      </form>
+    </div>
+
+    <%- include('./partials/scripts') %>
+</body>
+</html>
