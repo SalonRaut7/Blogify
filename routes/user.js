@@ -3,7 +3,7 @@ const User = require("../models/user");
 const multer = require("multer");
 const path = require("path");
 const router = Router();
-
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //regex for validating email
 const storage = multer.diskStorage({
   destination: "./public/uploads/profile/",
   filename: (req, file, cb) => {
@@ -41,6 +41,13 @@ router.get("/logout", (req, res) => {
 
 router.post("/signup", async (req, res) => {
   const { fullName, email, password } = req.body;
+  if (!emailRegex.test(email)) {
+    return res.render("signup",{error: "Invalid Password format",});
+  }
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/; //regular expression for validating password requirements
+  if (!passwordRegex.test(password)) {
+    return res.render("signup",{error: 'Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character.',});
+  }
   await User.create({
     fullName,
     email,
