@@ -71,7 +71,7 @@ router.post("/like/:id", async (req, res) => {
   if (!req.user) {
     return res.redirect("/user/signin?error=You must log in first to like a blog");
   }
-
+  
   const blog = await Blog.findById(req.params.id);
   if (!blog) return res.redirect("/");
 

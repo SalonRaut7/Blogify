@@ -12,6 +12,10 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+router.get('/forgot-password',(req,res)=>{
+  return res.render('forgotPassword');
+})
+
 router.get("/signin", (req, res) => {
   const error = req.query.error || null; // Get error from query param if exists
   return res.render("signin", { error });
